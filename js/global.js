@@ -22,11 +22,11 @@ var globalData={
 }
  
 
-document.write('<link rel="stylesheet" href="'+globalData.per+'js/easyui/insdep.easyui.min.css" type="text/css"/>');
-document.write('<link rel="stylesheet" href="'+globalData.per+'js/easyui/icon.css" type="text/css"/>');
-document.write('<link rel="stylesheet" href="'+globalData.per+'js/easyui/insdep.theme_default.css" type="text/css"/>');
-document.write('<script type="text/javascript" src="'+globalData.per+'js/jquery-1.7.1.js" ></script>');
-document.write('<script type="text/javascript" src="'+globalData.per+'js/easyui/jquery.easyui.min.js" ></script>');
-document.write('<script type="text/javascript" src="'+globalData.per+'js/easyui/insdep.extend.min.js" ></script>');
-document.write('<script type="text/javascript" src="'+globalData.per+'js/easyui/locale/easyui-lang-zh_CN.js"></script>');
+document.write('<link rel="stylesheet" href="js/easyui/insdep.easyui.min.css" type="text/css"/>');
+document.write('<link rel="stylesheet" href="js/easyui/icon.css" type="text/css"/>');
+document.write('<link rel="stylesheet" href="js/easyui/insdep.theme_default.css" type="text/css"/>');
+document.write('<script type="text/javascript" src="js/jquery-1.7.1.js" ></script>');
+document.write('<script type="text/javascript" src="js/easyui/jquery.easyui.min.js" ></script>');
+document.write('<script type="text/javascript" src="js/easyui/insdep.extend.min.js" ></script>');
+document.write('<script type="text/javascript" src="js/easyui/locale/easyui-lang-zh_CN.js"></script>');
 
