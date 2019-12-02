@@ -5,6 +5,8 @@
 		<meta charset="utf-8" />
 		<title></title>
 		<script src="js/global.js"></script>
+		<script src="js/map.js"></script>
+		<script src="js/index.js"></script>
 		<style type="text/css">
 			table td {
 				height: 30px;
@@ -16,59 +18,23 @@
 			.textarea{
 				font-size:18px
 			}
-		</style>
-		<script type="text/javascript">
-			function Map() {
-				var struct = function(key, value) {
-					this.key = key;
-					this.value = value;
-				}
-
-				var put = function(key, value) {
-					for(var i = 0; i < this.arr.length; i++) {
-						if(this.arr[i].key === key) {
-							this.arr[i].value = value;
-							return;
-						}
-					}
-					this.arr[this.arr.length] = new struct(key, value);
-				}
-
-				var get = function(key) {
-					for(var i = 0; i < this.arr.length; i++) {
-						if(this.arr[i].key === key) {
-							return this.arr[i].value;
-						}
-					}
-					return null;
-				}
-
-				var remove = function(key) {
-					var v;
-					for(var i = 0; i < this.arr.length; i++) {
-						v = this.arr.pop();
-						if(v.key === key) {
-							continue;
-						}
-						this.arr.unshift(v);
-					}
-				}
-
-				var size = function() {
-					return this.arr.length;
-				}
-
-				var isEmpty = function() {
-					return this.arr.length <= 0;
-				}
-				this.arr = new Array();
-				this.get = get;//根据key获取
-				this.put = put;//添加key,value
-				this.remove = remove;//根据key移除
-				this.size = size;//长度
-				this.isEmpty = isEmpty;//是否为空
+			
+			#entity { 
+				width: 100%;
+		        overflow: auto;
+		        word-break: break-all; /*解决兼容问题*/
+			} 
+			#reasonInfoTr{
+				position: absolute;
+				float: left;
+				top: 61px;
+				left: 706px;
+				color: #000000;
+				text-decoration: none;
+				/*background-color:transparent;背景透明*/
+				background-color:whitesmoke;
 			}
-		</script>
+		</style>
 	</head>
 
 	<body background="img/20677594_174232068000_2.jpg">
@@ -77,11 +43,11 @@
 				<td>
 					<table id="allRoles" style="width: 250px;">
 						<tr>
-							<td>实体</td>
+							<td style="text-align: center;"><strong><h4>实体</h4></strong></td>
 						</tr>
 						<tr>
 							<td>
-								<textarea name="" id="entity" class="textarea" onmouseout="setEntity(true)" style="width: 250px;height: 600px;"></textarea>
+								<textarea  name="" id="entity" title="点击复制文字"  class="textarea"  onmouseout="setEntity(true)" style="width: 250px;height: 600px;"></textarea>
 							</td>
 						</tr>
 					</table>
@@ -110,12 +76,13 @@
 				<td>
 					<table id="allRoles" style="width: 340px;">
 						<tr>
-							<td>SQL语句</td>
-							<td>条件</td>
+							<td style="text-align: center;"><strong><h4>SQL语句</h4></strong></td>
+							<td style="text-align: center;"><strong><h4>条件</h4></strong></td>
 						</tr>
 						<tr>
 							<td>
 								<textarea name="" id="sqls" class="textarea" style="width: 340px;height: 600px;"></textarea>
+								<a href="javascript:copyFn()" id="reasonInfoTr" class="easyui-linkbutton" >一键复制</a>
 							</td>
 							<td >
 								<p id="entity_tr" style="width: 150px;height:600px;overflow: auto;"></p>
@@ -125,163 +92,43 @@
 				</td>
 			</tr>
 		</table>
-		
-		<!--<div id="tiaoJian" class="easyui-window" data-options="closable: true,minimizable:false,maximizable:false,collapsible:false" title="条件" style="left:80%;width:150px;height:600px;">
-			<div id="entity_wid">
-				<table>
-					<tr><th>实体类</th></tr>
-					<tr id="entity_tr">
-						 
-					</tr>
-				</table>
-			</div>
-		</div>-->
 	</body>
-
 	<script type="text/javascript">
-		function obtainEntity(){
-			var entitys=$("#entity").val();
-			var strs= new Array(); //定义一数组
-			strs=entitys.split(";");
-			var attribute=new Array();//存属性
-			for (i=0;i<strs.length-1;i++ )
-			{
-				var priv=strs[i]+";";
-				
-				var index;
-				var privates=priv.indexOf("private");
-				if(privates>=0){
-					index=privates;
-				}
-				var publics=priv.indexOf("public");
-				if(publics>=0){
-					index=publics;
-				}
-				var protecteds=priv.indexOf("protected");
-				if(protecteds>=0){
-					index=protecteds;
-				}
-				/*var index=priv.indexOf("public");
-				var index=priv.indexOf("protected");*/
-				
-				var threeEnt=priv.substring(index,priv.lastIndexOf(';'));
-				threeEnt=threeEnt.replace("private","");
-				threeEnt=threeEnt.replace("public","");
-				threeEnt=threeEnt.replace("protected","");
-				threeEnt=threeEnt.replace("\t","");
-				threeEnt=threeEnt.replace("\n","");
-				threeEnt=threeEnt.replace("\n","");//必须处理两次
-				//alert(JSON.stringify(threeEnt));
-				var demo= new Array();
-				demo=threeEnt.split(" ");
-				var bark=0;
-				do{
-					bark++;
-				}while(demo[bark].length <= 0);
-				var t=bark;
-				do{
-					t++;
-					attribute[i]=demo[t];
-					//alert(t+","+demo[t])
-				}while(demo[t].length <= 0);
-			}
-			return attribute;
-		}
-		
-		
-		function setEntity(oneAndTwo){
-			var data,str="";
-			if (oneAndTwo) {
-				data=obtainEntity($("#entity").val());
-				for (var i=0;i<data.length;i++) {
-					str += "<tr><td><input type='checkbox' name='entity' checked='checked' value='"+data[i]+"'>"+data[i]+"</td></tr>";
-				}
-				$("#entity_tr").html(str)
-			} 
-		}
-		
-		
-		function getEntity(){
-			var getEntity=new Array();
-			$("input[name='entity']:checked").each(function(i){
-				getEntity[i]=$(this).val();
-			});
-			return getEntity;
-		}
-		
-		//查询sql
-		function selectEntity(){
-	 		if($("#formDemo").form("validate")) {
-	 			var sql= obtainEntity();
-	 			var result="<select id='***' parameterType='***.***' resultType='***.***'> \n SELECT \n"+sql+"\n FROM "+$("#tables").val();
-	 			
-	 			 	result+="\n <where> \n ";
-					var ifTabs='';
-					for(var i=0;i<sql.length;i++){
-						ifTabs+='\t<if test="'+sql[i]+' !=null and '+sql[i]+' !=\'\' "> \n';
-						ifTabs+="\t\t"+sql[i]+"=#{"+sql[i]+"},\n \t</if> \n";
+		$(function(){
+			$("#sqls").bind('input propertychange','textarea',function () {
+				var str=$("#sqls").val();
+					if(str.length>0){
+						$("#reasonInfoTr").show();
+					}else{
+						$("#reasonInfoTr").hide();
 					}
-					result+=ifTabs;
-					result+="</where> \n LIMIT #{page},#{rows} \n </select>";
-	 			
-	 				$("#sqls").val(result);
-	 		}
-		}
-		//删除sql
-		function deleteEntity(){
-			if($("#formDemo").form("validate")) {
-				var ids=new Array();
-				var sql= getEntity()+"";
-				ids=sql.split(",");
-				var result="<delete id='***' parameterType='***.***'>\n \t\t DELETE FROM "+$("#tables").val()+" WHERE "+ids[0]+" = #{"+ids[0]+"}\n\t</delete>";
-				$("#sqls").val(result);
+			});
+		})
+ 		
+	    	//一键复制
+	   		 function copyFn() {
+				var dd = $('#sqls');
+			        dd[0].select();
+			        document.execCommand("Copy");
 			}
-		}
-		//添加sql
-		function insertEntity(){
-			if($("#formDemo").form("validate")) {
-				var ids=getEntity();
-				var result="<insert id='***' parameterType='***.***'>\n \t\tINSERT INTO \n \t\t"+$("#tables").val()+"\n\t\t\t("+ids+") \n \t\tVALUES \n\t\t\t(";
-				for(var i=0;i<ids.length;i++){
-					result+="#{"+ids[i]+"},";
+	   		 //进入时隐藏一键复制按钮
+			$(function(){
+				$("#reasonInfoTr").hide();
+			})
+			//显示一键复制按钮
+			function shows(){
+				var str=$("#sqls").val();
+				if(str.length>0){
+					$("#reasonInfoTr").show();
 				}
-				result=result.substring(0,result.lastIndexOf(","));
-				result+=")";
-				result+="\n\t</insert>";
-				$("#sqls").val(result);
 			}
-		}
-		//修改sql
-		function updateEntity(){
-			if($("#formDemo").form("validate")) {
-				var ids=getEntity();
-				var result="<update id='***.***' parameterType='***.***'>\n \t UPDATE "+$("#tables").val()+"\n \t<set> \n ";
-				var ifTabs='';
-				for(var i=0;i<ids.length;i++){
-					ifTabs+='\t \t<if test="'+ids[i]+' !=null and '+ids[i]+' !=\'\' "> \n';
-					ifTabs+="\t\t\t"+ids[i]+"=#{"+ids[i]+"},\n \t</if> \n";
+			//隐藏一键复制按钮
+			function hides(){
+				var str=$("#sqls").val();
+				if(str.length==0){
+					$("#reasonInfoTr").hide();
 				}
-				result+=ifTabs;
-				result+="\t</set> \n \t WHERE "+ids[0]+"=#{"+ids[0]+"}";
-				result+="\n</update>";
-				$("#sqls").val(result); 
 			}
-		}
-		//mapper映射
-		function mapperEntity(){
-			if($("#formDemo").form("validate")) {
-				var ids=getEntity();
-				var id=$("#tables").val()+"Map";
-				var type="实体类路径";
-				var result="<resultMap id='"+id+"' type='"+type+"'> \n";
-				result+="\t<id column='"+ids[0]+"' property='"+ids[0]+"'/> \n";
-				for(var i=1;i<ids.length;i++){
-					result+="\t <result column='"+ids[i]+"' property='"+ids[i]+"'/> \n";
-				}
-				result+="</resultMap>";
-				$("#sqls").val(result);
-			}
-		}
 	</script>
 
 </html>
