@@ -1,4 +1,4 @@
-function obtainEntity(){
+		function obtainEntity(){
 			var entitys=$("#entity").val();
 			var strs= new Array(); //定义一数组
 			strs=entitys.split(";");
@@ -65,13 +65,20 @@ function obtainEntity(){
 			$("input[name='entity']:checked").each(function(i){
 				getEntity[i]=$(this).val();
 			});
-			return getEntity;
+				
+			if(getEntity.length==0){
+				 $.messager.alert("错误信息", "请先选择条件！","error");
+				 return;
+			}else{
+				return getEntity;
+			}
 		}
 		
 		//查询sql
 		function selectEntity(){
+				
 	 		if($("#formDemo").form("validate")) {
-	 			var sql= obtainEntity();
+	 			var sql= getEntity();
 	 			var result="<select id='***' parameterType='***.***' resultType='***.***'> \n SELECT \n"+sql+"\n FROM "+$("#tables").val();
 	 			
 	 			 	result+="\n <where> \n ";
@@ -91,6 +98,9 @@ function obtainEntity(){
 			if($("#formDemo").form("validate")) {
 				var ids=new Array();
 				var sql= getEntity()+"";
+				if(sql=="undefined"){
+				 return;
+				}
 				ids=sql.split(",");
 				var result="<delete id='***' parameterType='***.***'>\n \t\t DELETE FROM "+$("#tables").val()+" WHERE "+ids[0]+" = #{"+ids[0]+"}\n\t</delete>";
 				$("#sqls").val(result);
