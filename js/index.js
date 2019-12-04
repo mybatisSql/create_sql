@@ -20,8 +20,6 @@
 				if(protecteds>=0){
 					index=protecteds;
 				}
-				/*var index=priv.indexOf("public");
-				var index=priv.indexOf("protected");*/
 				
 				var threeEnt=priv.substring(index,priv.lastIndexOf(';'));
 				threeEnt=threeEnt.replace("private","");
@@ -41,7 +39,6 @@
 				do{
 					t++;
 					attribute[i]=demo[t];
-					//alert(t+","+demo[t])
 				}while(demo[t].length <= 0);
 			}
 			return attribute;
@@ -85,7 +82,7 @@
 					var ifTabs='';
 					for(var i=0;i<sql.length;i++){
 						ifTabs+='\t<if test="'+sql[i]+' !=null and '+sql[i]+' !=\'\' "> \n';
-						ifTabs+="\t\t"+sql[i]+"=#{"+sql[i]+"},\n \t</if> \n";
+						ifTabs+="\t\t and "+sql[i]+"=#{"+sql[i]+"}\n \t</if> \n";
 					}
 					result+=ifTabs;
 					result+="</where> \n LIMIT #{page},#{rows} \n </select>";
@@ -128,7 +125,7 @@
 				var ids=getEntity();
 				var result="<update id='***.***' parameterType='***.***'>\n \t UPDATE "+$("#tables").val()+"\n \t<set> \n ";
 				var ifTabs='';
-				for(var i=0;i<ids.length;i++){
+				for(var i=1;i<ids.length;i++){
 					ifTabs+='\t \t<if test="'+ids[i]+' !=null and '+ids[i]+' !=\'\' "> \n';
 					ifTabs+="\t\t\t"+ids[i]+"=#{"+ids[i]+"},\n \t</if> \n";
 				}
