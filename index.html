@@ -35,6 +35,7 @@
 				background-color:whitesmoke;
 			}
 		</style>
+		
 	</head>
 
 	<body background="img/20677594_174232068000_2.jpg">
@@ -82,7 +83,7 @@
 						<tr>
 							<td>
 								<textarea name="" id="sqls" class="textarea" style="width: 340px;height: 600px;"></textarea>
-								<a href="javascript:copyFn()" id="reasonInfoTr" class="easyui-linkbutton" >一键复制</a>
+								<a href="javascript:copyFn()" id="reasonInfoTr" class="easyui-linkbutton"><span id="copy">一键复制</span></a>
 							</td>
 							<td >
 								<p id="entity_tr" style="width: 150px;height:600px;overflow: auto;"></p>
@@ -91,7 +92,16 @@
 					</table>
 				</td>
 			</tr>
+			<tr>
+				<td colspan="3" style="border: 0px; text-align: center; font-size: 14px;">
+					<font style="color: #009900;">下载最新版<br/>
+						网页版：https://github.com/mybatisSql/create_sql.git<br />
+						PC版：
+					</font>
+				</td>
+			</tr>
 		</table>
+		
 	</body>
 	<script type="text/javascript">
 		$(function(){
@@ -110,11 +120,12 @@
 				var dd = $('#sqls');
 			        dd[0].select();
 			        document.execCommand("Copy");
+			        $("#copy").text("复制成功")
 			}
 	   		 //进入时隐藏一键复制按钮
 			$(function(){
 				$("#reasonInfoTr").hide();
-			})
+			}) 
 			//显示一键复制按钮
 			function shows(){
 				var str=$("#sqls").val();
